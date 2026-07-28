@@ -8,6 +8,10 @@ The plugin is intentionally only a UI wrapper. It does not edit fan curves,
 replace the fw-fanctrl service, or talk to the Framework embedded controller
 directly.
 
+## Preview
+
+![Framework Fan Control widget showing fan status and strategy selection](docs/widget-preview.png)
+
 ## Features
 
 - Shows the effective fan strategy in horizontal and vertical DankBar layouts.
