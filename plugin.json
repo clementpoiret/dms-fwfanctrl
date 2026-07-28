@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/AvengeMedia/DankMaterialShell/master/PLUGINS/plugin-schema.json",
+  "id": "fwFanctrl",
+  "name": "Framework Fan Control",
+  "description": "Monitor and switch fw-fanctrl strategies from DankBar",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "clementpoiret",
+  "repository": "https://github.com/clementpoiret/dms-fwfanctrl",
+  "icon": "mode_fan",
+  "type": "widget",
+  "capabilities": [
+    "dankbar-widget"
+  ],
+  "component": "./FwFanctrlWidget.qml",
+  "startupCheck": "./StartupCheck.qml",
+  "requires_dms": ">=1.5.0",
+  "dependencies": [
+    "fw-fanctrl"
+  ],
+  "permissions": [
+    "process"
+  ]
+}
