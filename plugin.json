@@ -3,7 +3,7 @@
   "id": "fwFanctrl",
   "name": "Framework Fan Control",
   "description": "Monitor and switch fw-fanctrl strategies from DankBar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "clementpoiret",
   "repository": "https://github.com/clementpoiret/dms-fwfanctrl",

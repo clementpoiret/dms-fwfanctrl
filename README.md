@@ -20,8 +20,9 @@ directly.
 - Switches to a named strategy without invoking a shell.
 - Restores fw-fanctrl's configured charging/discharging defaults with the
   **Automatic** option.
-- Refreshes status every five seconds and reports command failures without
-  changing the displayed selection optimistically.
+- Refreshes status every five seconds while the popout is open and once a
+  minute otherwise, and reports command failures without changing the
+  displayed selection optimistically.
 
 ## Requirements
 
