@@ -22,6 +22,12 @@ PluginComponent {
     property string pendingStrategy: ""
     property string lastError: ""
     property string listError: ""
+    property bool popoutOpen: false
+
+    // The bar pill only shows the strategy, so poll slowly unless the popout
+    // (which shows live speed and temperature) is open.
+    readonly property int activePollInterval: 5000
+    readonly property int idlePollInterval: 60000
 
     readonly property string displayStrategy: available && currentStrategy !== "" ? currentStrategy : "Unavailable"
     readonly property var selectorItems: {
@@ -46,8 +52,14 @@ PluginComponent {
         Qt.callLater(() => refreshAll(false));
     }
 
+    onPopoutOpenChanged: {
+        if (popoutOpen) {
+            refreshAll(false);
+        }
+    }
+
     Timer {
-        interval: 5000
+        interval: root.popoutOpen ? root.activePollInterval : root.idlePollInterval
         running: true
         repeat: true
         onTriggered: root.refreshStatus(false)
@@ -218,7 +230,7 @@ PluginComponent {
 
     verticalBarPill: Component {
         Column {
-            spacing: 1
+            spacing: Theme.spacingXXS
 
             DankIcon {
                 name: "mode_fan"
@@ -253,11 +265,17 @@ PluginComponent {
             }
             showCloseButton: true
 
+            Binding {
+                target: root
+                property: "popoutOpen"
+                value: popout.parentPopout ? popout.parentPopout.shouldBeVisible : false
+            }
+
             headerActions: Component {
                 DankActionButton {
                     iconName: "refresh"
                     iconColor: Theme.surfaceVariantText
-                    buttonSize: 28
+                    buttonSize: Theme.iconSize + Theme.spacingXS
                     enabled: !root.statusLoading && !root.listLoading && !root.actionRunning
                     tooltipText: "Refresh"
                     tooltipSide: "bottom"
@@ -277,7 +295,6 @@ PluginComponent {
 
                     Row {
                         width: parent.width
-                        height: 62
                         spacing: Theme.spacingS
 
                         Repeater {
@@ -303,13 +320,15 @@ PluginComponent {
 
                             StyledRect {
                                 width: (parent.width - Theme.spacingS * 2) / 3
-                                height: parent.height
+                                height: statContent.implicitHeight + Theme.spacingM * 2
                                 radius: Theme.cornerRadius
                                 color: Theme.surfaceContainerHigh
 
                                 Column {
+                                    id: statContent
+
                                     anchors.centerIn: parent
-                                    spacing: 2
+                                    spacing: Theme.spacingXXS
 
                                     Row {
                                         anchors.horizontalCenter: parent.horizontalCenter
@@ -317,7 +336,7 @@ PluginComponent {
 
                                         DankIcon {
                                             name: modelData.icon
-                                            size: 16
+                                            size: Theme.iconSizeSmall
                                             color: Theme.surfaceVariantText
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -380,7 +399,7 @@ PluginComponent {
                             )
 
                             width: ListView.view.width
-                            height: 48
+                            height: Math.max(Theme.iconSize, labelColumn.implicitHeight) + Theme.spacingS * 2
                             radius: Theme.cornerRadius
                             color: {
                                 if (selected) {
@@ -409,8 +428,10 @@ PluginComponent {
                                 }
 
                                 Column {
+                                    id: labelColumn
+
                                     width: parent.width - Theme.iconSize - Theme.spacingS
-                                    spacing: 1
+                                    spacing: Theme.spacingXXS
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     StyledText {
